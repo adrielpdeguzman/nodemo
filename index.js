@@ -2,9 +2,15 @@ const _ = require('lodash');
 const app = require('express')();
 const Mongo = require('mongodb');
 
+/**
+ * Set heroku/local "env" variables
+ */
+const MONGO_URI = process.env.MONGODB_URI || 'mongodb://localhost/nodemo';
+const PORT = process.env.PORT || '3000';
+
 app.use(require('body-parser').json());
 
-Mongo.MongoClient.connect('mongodb://localhost/nodemo', (err, db) => {
+Mongo.MongoClient.connect(MONGO_URI, (err, db) => {
   if (err) throw err;
 
   console.log('Successfully connected to MongoDB!');
@@ -64,15 +70,15 @@ Mongo.MongoClient.connect('mongodb://localhost/nodemo', (err, db) => {
 /**
  * Error 404 middleware
  */
-app.use((req, res, next) => {
+/*app.use((req, res, next) => {
   const err = new Error('Not Found');
   err.status = 404;
 
   next(err);
-})
+});*/
 
-app.listen(3000, (err) => {
+app.listen(PORT, (err) => {
   if (err) throw err;
 
-  console.log('Server started at http://localhost:3000');
+  console.log(`Server started at ${PORT}`);
 });
